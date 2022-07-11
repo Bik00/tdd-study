@@ -17,6 +17,6 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<String> addMember(@RequestBody UserRequestDTO.AddMember user) {
-        return ResponseEntity.ok().body(memberService.registerMember2(user));
+        return ResponseEntity.ok().body(memberService.registerMember(user));
     }
 }

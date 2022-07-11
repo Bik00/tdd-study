@@ -12,13 +12,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public boolean registerMember(UserRequestDTO.AddMember user) {
-        return false;
-    }
-
-    public String registerMember2(UserRequestDTO.AddMember user) {
+    public String registerMember(UserRequestDTO.AddMember user) {
         Member member = memberRepository.save(user.toEntity());
         if (member == null) throw new RuntimeException("fail");
         return "success";
     }
+
 }
