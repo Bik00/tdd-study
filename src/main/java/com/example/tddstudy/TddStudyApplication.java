@@ -6,12 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @SpringBootApplication
 public class TddStudyApplication {
     public static void main(String[] args) {
         SpringApplication.run(TddStudyApplication.class, args);
-        BeanFactory
     }
 }
 // 스프링이 구동될 때
