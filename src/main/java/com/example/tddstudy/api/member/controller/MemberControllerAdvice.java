@@ -26,7 +26,7 @@ public class MemberControllerAdvice {
                 .collect(Collectors.joining());
 
         return ResponseEntity
-                .internalServerError()
+                .badRequest()
                 .body(errors);
     }
 }

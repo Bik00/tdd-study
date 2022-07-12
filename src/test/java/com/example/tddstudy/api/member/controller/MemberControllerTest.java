@@ -6,7 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -47,13 +49,24 @@ public class MemberControllerTest {
 
         actions.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
-             //   .andExpect(MockMvcResultMatchers.content().string("success"));
     }
 
     @Test
     @DisplayName("회원 비밀번호가 전달되지 않을 경우 회원 등록이 실패해야 합니다.")
-    void fail_addMember_notContain_password() {
+    void fail_addMember_notContain_password() throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("nickname", "mrKim90");
+        //map.put("password", "123456789");
 
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders
+                .post("/v1/member/register")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                .content(objectMapper.writeValueAsString(map))
+        );
+
+        actions.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
