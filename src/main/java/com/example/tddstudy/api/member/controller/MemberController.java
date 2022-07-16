@@ -1,7 +1,9 @@
 package com.example.tddstudy.api.member.controller;
 
 import com.example.tddstudy.api.member.exception.BizException;
+import com.example.tddstudy.api.member.model.Member;
 import com.example.tddstudy.api.member.model.dto.UserRequestDTO;
+import com.example.tddstudy.api.member.model.dto.UserResponseDTO;
 import com.example.tddstudy.api.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +22,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> addMember(@Valid @RequestBody UserRequestDTO.AddMember user, BindingResult result) {
+    public ResponseEntity<UserResponseDTO.AddMember> addMember(@Valid @RequestBody UserRequestDTO.AddMember user, BindingResult result) {
         if (result.hasErrors()) throw new BizException(result.getFieldErrors());
-        return ResponseEntity.ok().body(memberService.registerMember(user));
+        return ResponseEntity.ok().body(
+                memberService.registerMember(user)
+        );
     }
 }

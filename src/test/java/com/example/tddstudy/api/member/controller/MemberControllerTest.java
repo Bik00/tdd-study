@@ -1,16 +1,11 @@
 package com.example.tddstudy.api.member.controller;
 
 import com.example.tddstudy.api.member.service.MemberService;
-import com.example.tddstudy.config.WebConfig;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,13 +14,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
 
-@WebMvcTest(value = {MemberController.class, MemberControllerAdvice.class}) // @Controller 어노테이션이 붙은 빈들만 애플리케이션 컨텍스트안에 넣어줌.
+@WebMvcTest(value = {MemberController.class, MemberControllerAdvice.class})
+// @Controller 어노테이션이 붙은 빈들만 애플리케이션 컨텍스트안에 넣어줌.
 public class MemberControllerTest {
 
     @Autowired
@@ -50,7 +45,7 @@ public class MemberControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON + ";charset=UTF-8")
                 .content(objectMapper.writeValueAsString(map))
-                );
+        );
 
         actions.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());

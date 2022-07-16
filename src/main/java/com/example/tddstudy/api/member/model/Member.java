@@ -1,6 +1,7 @@
 package com.example.tddstudy.api.member.model;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 public class Member {
 
     @Id
