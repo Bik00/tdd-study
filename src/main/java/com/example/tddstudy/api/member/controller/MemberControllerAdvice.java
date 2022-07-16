@@ -1,6 +1,7 @@
 package com.example.tddstudy.api.member.controller;
 
 import com.example.tddstudy.api.member.exception.BizException;
+import com.example.tddstudy.api.member.exception.ErrorResponseDTO;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,14 +13,14 @@ import java.util.stream.Collectors;
 public class MemberControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+    public ResponseEntity<ErrorResponseDTO> handleRuntimeException(RuntimeException e) {
         return ResponseEntity
                 .internalServerError()
-                .body(e.getMessage());
+                .body(new ErrorResponseDTO(e.getMessage()));
     }
 
     @ExceptionHandler(BizException.class)
-    public ResponseEntity<String> handleBizException(BizException e) {
+    public ResponseEntity<ErrorResponseDTO> handleBizException(BizException e) {
 
         String errors = e.getFieldErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -27,6 +28,19 @@ public class MemberControllerAdvice {
 
         return ResponseEntity
                 .badRequest()
-                .body(errors);
+                .body(new ErrorResponseDTO(errors));
     }
 }
+/*
+    {
+        {
+           message: "닉네임은 최소 3글자 이상이어야 합니다",
+           rejectedValue: ab
+        },
+        {
+           message: "비밀번호는 반드시 필요합니다",
+           rejectValue: null
+        }
+    }
+
+ */

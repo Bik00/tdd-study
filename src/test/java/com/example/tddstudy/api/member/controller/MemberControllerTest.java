@@ -1,6 +1,8 @@
 package com.example.tddstudy.api.member.controller;
 
 import com.example.tddstudy.api.member.service.MemberService;
+import com.example.tddstudy.config.WebConfig;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,10 +19,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebMvcTest({MemberController.class, MemberControllerAdvice.class}) // @Controller 어노테이션이 붙은 빈들만 애플리케이션 컨텍스트안에 넣어줌.
+import static org.hamcrest.Matchers.containsString;
+
+@WebMvcTest(value = {MemberController.class, MemberControllerAdvice.class}) // @Controller 어노테이션이 붙은 빈들만 애플리케이션 컨텍스트안에 넣어줌.
 public class MemberControllerTest {
 
     @Autowired
@@ -71,14 +76,40 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("회원 닉네임이 3글자를 넘지 않을 경우 회원 등록이 실패해야 합니다.")
-    void fail_addMember_not_over_3_words() {
+    void fail_addMember_not_over_3_words() throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("nickname", "1r");
+        map.put("password", "12345678");
 
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders
+                .post("/v1/member/register")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                .content(objectMapper.writeValueAsString(map))
+        );
+
+        actions.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(containsString("닉네임은 최소 3글자 이상이어야 합니다.")));
     }
 
     @Test
     @DisplayName("회원 닉네임에 0~9 사이의 숫자가 없을 경우 회원 등록이 실패해야 합니다.")
-    void fail_addMember_notContain_digit() {
+    void fail_addMember_notContain_digit() throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("nickname", "one");
+        map.put("password", "12345678");
 
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders
+                .post("/v1/member/register")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                .content(objectMapper.writeValueAsString(map))
+        );
+
+        actions.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(containsString("닉네임에 반드시 0~9 사이의 숫자가 하나 이상 포함되어야 합니다.")));
     }
 
     @Test
